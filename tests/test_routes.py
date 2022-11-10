@@ -159,14 +159,14 @@ class TestAccountService(TestCase):
         """It should Update an existing Account"""
         new_account = self._create_accounts(1)[0]
         new_account.name = "NEW NAME"
-        
+
         response = self.client.put(
-            f"{BASE_URL}/{new_account.id}", 
+            f"{BASE_URL}/{new_account.id}",
             json=new_account.serialize(),
             content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        
+
         updated_account = response.get_json()
         self.assertEqual(updated_account["name"], "NEW NAME")
 
@@ -174,7 +174,7 @@ class TestAccountService(TestCase):
         """It should return HTTP_404_NOT_FOUND when Update Account not found"""
         account = self._create_accounts(1)[0]
         response = self.client.put(
-            f"{BASE_URL}/0", 
+            f"{BASE_URL}/0",
             json=account.serialize(),
             content_type="application/json"
         )
@@ -184,7 +184,7 @@ class TestAccountService(TestCase):
         """It should not Update an Account when sending the wrong data"""
         account = self._create_accounts(1)[0]
         response = self.client.put(
-            f"{BASE_URL}/{account.id}", 
+            f"{BASE_URL}/{account.id}",
             json={"name": "not enough data"},
             content_type="application/json"
         )
@@ -194,7 +194,7 @@ class TestAccountService(TestCase):
         """It should not Update an Account when sending the wrong media type"""
         account = self._create_accounts(1)[0]
         response = self.client.put(
-            f"{BASE_URL}/{account.id}", 
+            f"{BASE_URL}/{account.id}",
             json=account.serialize(),
             content_type="test/html"
         )
@@ -208,11 +208,11 @@ class TestAccountService(TestCase):
 
     def test_delete_account_not_found(self):
         """It should Do Nothing when Delete not found Account"""
-        account = self._create_accounts(1)[0]
+        self._create_accounts(1)[0]
         response = self.client.delete(f"{BASE_URL}/0")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-        list_response= self.client.get(
+        list_response = self.client.get(
             BASE_URL, content_type="application/json"
         )
         accounts = list_response.get_json()
